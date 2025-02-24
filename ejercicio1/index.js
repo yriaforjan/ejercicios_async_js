@@ -32,6 +32,7 @@ const renderCharacters = (characters) => {
         option.innerText = `${character.name}`;
         option.value = `${character.image}`;
         select.appendChild(option);
+        img.alt = `${character.name}`;
     }
 
     select.addEventListener("change", (event) => {
@@ -39,4 +40,6 @@ const renderCharacters = (characters) => {
     });
 };
 
-getCharacters();
+window.addEventListener("DOMContentLoaded", () => {
+    getCharacters();
+});
