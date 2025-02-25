@@ -1,21 +1,21 @@
 const getCharacters = async () => {
     try {
         const res = await fetch("https://thronesapi.com/api/v2/Characters");
-        const characters = await res.json();
-        mapCharacters(characters);
+        const data = await res.json();
+        mapCharacters(data);
     } catch (error) {
         alert("Unable to fetch characters.");
     }
 };
 
-const mapCharacters = (characters) => {
-    const mappedCharacters = characters.map((character) => {
+const mapCharacters = (data) => {
+    const characters = data.map((character) => {
         return {
             name: character.fullName,
             image: character.imageUrl
         };
     });
-    renderCharacters(mappedCharacters); 
+    renderCharacters(characters);
 }
 
 const renderCharacters = (characters) => {
@@ -32,13 +32,25 @@ const renderCharacters = (characters) => {
         option.innerText = `${character.name}`;
         option.value = `${character.image}`;
         select.appendChild(option);
-        img.alt = `${character.name}`;
     }
 
-    select.addEventListener("change", (event) => {
-        img.src = event.target.value || "";
-    });
+    changeImage();
 };
+
+const changeImage = () => {
+    const select = document.getElementById("character-list");
+    const img = document.querySelector(".character-image");
+
+    select.addEventListener("change", (event) => {
+        const defaultOption = select.querySelector("option[value='']");
+        if (defaultOption) {
+        defaultOption.remove();
+        }
+
+        img.src = event.target.value || "";
+        img.alt = select.options[select.selectedIndex].text;
+    });
+}
 
 window.addEventListener("DOMContentLoaded", () => {
     getCharacters();
